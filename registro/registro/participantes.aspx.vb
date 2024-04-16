@@ -4,7 +4,7 @@ Imports System.Net.Mail
 
 Partial Class participantes
     Inherits System.Web.UI.Page
-
+    Private _dalRegistro As New DalRegistro()
     Protected lista_Registros As List(Of BORegistro)
     Dim strCondicion As String
 
@@ -124,16 +124,42 @@ Partial Class participantes
 
     End Sub
 
-
+    'Protected Sub GenerarClave(sender As Object, e As EventArgs)
+    '    Dim boton As Button = TryCast(sender, Button)
+    '    If boton IsNot Nothing Then
+    '        Dim idRegistro As Integer = CInt(boton.CommandArgument)
+    '        EnviarCorreo(idRegistro)
+    '        Response.Write("<script>alert('Clave generada correctamente.');</script>")
+    '        btnBuscar_Click(Nothing, Nothing)
+    '    End If
+    'End Sub
     Protected Sub GenerarClave(sender As Object, e As EventArgs)
         Dim boton As Button = TryCast(sender, Button)
         If boton IsNot Nothing Then
             Dim idRegistro As Integer = CInt(boton.CommandArgument)
-            EnviarCorreo(idRegistro)
-            Response.Write("<script>alert('Clave generada correctamente.');</script>")
+            ' Verificar si ya se ha generado una clave para este registro
+            Dim claveGenerada As Boolean = VerificarClaveGenerada(idRegistro)
+            If Not claveGenerada Then
+                ' Generar la clave y enviar el correo
+                EnviarCorreo(idRegistro)
+                Response.Write("<script>alert('Clave generada correctamente.');</script>")
+                ' Deshabilitar el botón después de generar la clave
+                boton.Enabled = False
+            Else
+                ' Si la clave ya ha sido generada, mostrar un mensaje o realizar alguna acción
+                Response.Write("<script>alert('La clave para este registro ya ha sido generada.');</script>")
+            End If
             btnBuscar_Click(Nothing, Nothing)
         End If
     End Sub
+
+    Public Function VerificarClaveGenerada(idRegistro As Integer) As Boolean
+        Dim objBoRegistro As BORegistro = _dalRegistro.ObtenerPorIdRegistro(idRegistro)
+        ' Comprobar si el registro tiene una clave asignada
+        Return Not String.IsNullOrEmpty(objBoRegistro.ClaveRegistro)
+    End Function
+
+
 
     Protected Sub EliminarRegistro(sender As Object, e As EventArgs)
         Dim boton As Button = TryCast(sender, Button)
@@ -147,7 +173,7 @@ Partial Class participantes
 
     Protected Function EnviarCorreo(ByVal id As Integer) As Boolean
         Dim boRegistro As BORegistro = New DalRegistro().ObtenerPorIdRegistro(id)
-        If boRegistro.ClaveRegistro.Trim() = "" Then
+        If String.IsNullOrEmpty(boRegistro.ClaveRegistro) Then
             boRegistro.ClaveRegistro = New DalRegistro().AsignarClavePorUsuario(boRegistro.Id)
         End If
         Dim urlBase As String = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath
@@ -165,8 +191,8 @@ Partial Class participantes
         cuerpo = cuerpo + "<strong>MotoClub: </strong>" + boRegistro.MotoClub + "<br>"
         cuerpo = cuerpo + "<strong>Correo electronico: </strong>" + boRegistro.Email + "<br>"
         cuerpo = cuerpo + "<strong>Numero de Serie o VIN: </strong>" + boRegistro.NoSerieVin + "<br><br>"
-        cuerpo = cuerpo + "<strong>IMPORTANTE: EL DIA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR UNA COPIA DE TU CREDENCIAL DE ELECTOR JUNTO CON ESTE EMAIL, DE LO CONTRARIO NO RECIBIRA PAQUETE DE BIENVENIDA</strong><br>"
-        cuerpo = cuerpo + "<strong>El número de participación es único e intransferible, favor de tomar muy en cuenta estos requisitos. Cualquier duda favor de comunicarse al 2381505344 o bien escribir al correo electrónico: chicoharley.teh@hotmail.com</strong><br>"
+        cuerpo = cuerpo + "<FONT SIZE=20><strong>IMPORTANTE: EL DÍA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR SU NÚMERO DE FOLIO (IMPRESO O EN IMAGEN) ASÍ COMO IDENTIFICACIÓN OFICIAL (FÍSICA) PARA VALIDAR SU REGISTRO Y RECIBIR SU KIT DE BIENVENIDA</strong></font><br>"
+        cuerpo = cuerpo + "<FONT SIZE=15><strong>El número de participación es único e intransferible. Favor de tomar en cuenta estos requisitos para agilizar el proceso. Cualquier duda comunicarse al 2381505344 o bien escribir al correo: chicoharley.teh@hotmail.com</strong></font><br>"
         'Dim objRegistro As DalRegistro = New DalRegistro()
         'Dim tabla As DataTable = objRegistro.ConsultarDataTable()
         'Dim correo2 As New MailMessage()
@@ -220,7 +246,7 @@ Partial Class participantes
         Dim correo As New MailMessage()
         'correo.From = New MailAddress("contactohosting1@gmail.com")
         'correo.From = New MailAddress("chicoharley.teh@gmail.com")
-        correo.From = New MailAddress("chicoharley.teh2023@gmail.com")
+        correo.From = New MailAddress("chico.harley2024@gmail.com")
         'Destinatario
         correo.[To].Add(boRegistro.Email.Trim)
         'correo.Bcc.Add("marceloleon@outlook.com")
@@ -236,7 +262,8 @@ Partial Class participantes
         servicio.UseDefaultCredentials = False
         'servicio.Credentials = New NetworkCredential("contactohosting1@gmail.com", "M@r1@n1t@")
         'servicio.Credentials = New NetworkCredential("chicoharley.teh@gmail.com", "chicoh@rley2020")
-        servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        'servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        servicio.Credentials = New NetworkCredential("chico.harley2024@gmail.com", "rfdssdjgtyhevvbc")
 
         Dim respuesta As Boolean = False
         Dim html As AlternateView = AlternateView.CreateAlternateViewFromString("<img src=" + "3.21.129.7/imageMail/header.png" + " alt=""Logo"" /><br />Usted ha quedado registrado para el evento de Chico Harley con los siguientes datos: <br><br>" + cuerpo, System.Text.Encoding.UTF8, "text/html")

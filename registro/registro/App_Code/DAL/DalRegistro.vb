@@ -6,10 +6,12 @@ Public Class DalRegistro
     'Private Const Cad As String = "Data Source=.\SQLEXPRESS;Initial Catalog=adminchhly_ChicoHarley;User ID=sa;Password=SQL1234567a"
     'Private Const Cad As String = "Data Source=54.244.60.209;Initial Catalog=adminchhly_ChicoHarley;User ID=Linkadmin;Password=link123"
     'Private Const Cad As String = "Data Source=DESKTOP-GD5MVN2;Initial Catalog=adminchhly_ChicoHarley; Integrated Security=True"
-    Private Const Cad As String = "Data Source=dbchicoharley.c97bzcducdmm.us-east-2.rds.amazonaws.com;Initial Catalog=adminchhly_ChicoHarley;User ID=admin;Password=barco007"
+    'Private Const Cad As String = "Data Source=dbchicoharley.c97bzcducdmm.us-east-2.rds.amazonaws.com;Initial Catalog=adminchhly_ChicoHarley;User ID=admin;Password=barco007"
+    Private Const Cad As String = "Data Source=chicoharley.cnw60iy08a5z.us-east-2.rds.amazonaws.com;Initial Catalog=adminchhly_ChicoHarley;User ID=admin;Password=chico007"
     'Private cad As String = "Data Source=DESKTOP-GD5MVN2;Initial Catalog=adminchhly_ChicoHarley;Integrated Security=SSPI"
     Property ErrorMessage() As String
     Private ReadOnly _con As SqlConnection
+
 
     Public Function ObtenerPorCondiciones(ByVal condicion As String) As List(Of BORegistro)
         Dim listaBoRegistro As New List(Of BORegistro)()
@@ -56,18 +58,19 @@ Public Class DalRegistro
         If _con.State = ConnectionState.Closed Then
             _con.Open()
         End If
-        sql = "SELECT ID FROM CH_Registro where Email = '" + Correo + "'"
+        ' Modifica la consulta SQL para seleccionar el ID más reciente asociado al correo electrónico
+        sql = "SELECT TOP 1 ID FROM CH_Registro WHERE Email = '" + Correo + "' ORDER BY ID DESC"
         Dim cmd As New SqlCommand(sql, _con)
+        Dim id As Integer = 0
         Dim fbdatareader As SqlDataReader = cmd.ExecuteReader
-        Dim id As Integer
-        While (fbdatareader.Read)
+        If fbdatareader.Read Then
+            ' Asigna el ID obtenido
             id = fbdatareader.GetInt32(0)
-            fbdatareader.Close()
-            Return id
-        End While
+        End If
         fbdatareader.Close()
-        Return 0
+        Return id
     End Function
+
     Public Function ObtenerIDporCelular(ByVal telefono As String) As Boolean
         Dim sql As String = String.Empty
         If _con.State = ConnectionState.Closed Then

@@ -2,6 +2,7 @@
 Imports System.Net
 Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Drawing
 
 
 Partial Class formularioContacto
@@ -24,6 +25,15 @@ Partial Class formularioContacto
 #Region "Sección: Opciones del Formulario"
 
     Protected Sub btnRegistrate_Click(sender As Object, e As EventArgs) Handles btnRegistrate.Click
+
+        Dim boRegistro As New BORegistro()
+
+        ' Verificar si el correo ya está registrado
+        If ExisteDatoPreviamente(txtEmail.Text.ToLower().Trim(), ValoresUnicos.Email) Then
+            ' Si el correo ya está registrado, asigna una cadena vacía a ClaveRegistro
+            boRegistro.ClaveRegistro = ""
+        End If
+
         If txtLugar.Text.Trim.ToLower = "ajalpan" Or txtEstado.Text.Trim.ToLower = "ajalpan" Then
             Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2301505344 con Blanca González Solis');</script>")
             Exit Sub
@@ -68,7 +78,7 @@ Partial Class formularioContacto
                                         Exit Sub
                                     End If
                                 End If
-                                    Case "M" : Dim m As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("M")
+                            Case "M" : Dim m As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("M")
                                 Dim als As Integer = New DalRegistro().ObtenerTallaPY("M")
                                 If m >= als Then
                                     If als = 0 Then
@@ -84,7 +94,7 @@ Partial Class formularioContacto
                                         Exit Sub
                                     End If
                                 End If
-                                    Case "XL" : Dim xl As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("XL")
+                            Case "XL" : Dim xl As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("XL")
                                 Dim alm As Integer = New DalRegistro().ObtenerTallaPY("XL")
                                 If xl >= alm Then
                                     If alm = 0 Then
@@ -123,8 +133,8 @@ Partial Class formularioContacto
                             Exit Sub
                         End If
                         If GuardarInformacion() Then
-                            'Dim idRegistro As Integer = objRegistro.ObtenerIDporCorreo(txtEmail.Text)
-                            'EnviarCorreo(idRegistro)
+                            Dim idRegistro As Integer = objRegistro.ObtenerIDporCorreo(txtEmail.Text)
+                            EnviarCorreo(idRegistro)
                             ClearControls()
                             Response.Write("<script>alert('Registro realizado correctamente.');</script>")
                         Else
@@ -146,8 +156,11 @@ Partial Class formularioContacto
     End Sub
     Protected Function EnviarCorreo(ByVal id As Integer) As Boolean
         Dim boRegistro As BORegistro = New DalRegistro().ObtenerPorIdRegistro(id)
-        If boRegistro.ClaveRegistro.Trim() = "" Then
-            boRegistro.ClaveRegistro = New DalRegistro().AsignarClavePorUsuario(boRegistro.Id)
+        Dim dalRegistro As New DalRegistro()
+        boRegistro.ClaveRegistro = ""
+        If String.IsNullOrEmpty(boRegistro.ClaveRegistro.Trim()) Then
+            ' Generar una nueva clave solo si ClaveRegistro está vacío
+            boRegistro.ClaveRegistro = dalRegistro.AsignarClavePorUsuario(boRegistro.Id)
         End If
         Dim urlBase As String = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath
         Dim urlVerificador As String = "validacion.aspx?clave=" + boRegistro.ClaveRegistro
@@ -164,11 +177,11 @@ Partial Class formularioContacto
         cuerpo = cuerpo + "<strong>Correo electronico: </strong>" + boRegistro.Email + "<br>"
         cuerpo = cuerpo + "<strong>Numero de Serie o VIN: </strong>" + boRegistro.NoSerieVin + "<br><br>"
         'cuerpo = cuerpo + "<strong>Confirmar Registro: </strong><a href=""" + cadenaUrl + """>Confirmar Registro dando Click Aqui</a><br><br>"
-        cuerpo = cuerpo + "<FONT SIZE=20><strong>IMPORTANTE: EL DIA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR UNA COPIA DE TU CREDENCIAL DE ELECTOR JUNTO CON ESTE EMAIL, DE LO CONTRARIO NO RECIBIRA PAQUETE DE BIENVENIDA</strong></font><br>"
-        cuerpo = cuerpo + "<FONT SIZE=15><strong>El número de participación es único e intransferible, favor de tomar muy en cuenta estos requisitos. Cualquier duda favor de comunicarse al 2381505344 o bien escribir al correo electrónico: chicoharley.teh@hotmail.com</strong></font><br>"
+        cuerpo = cuerpo + "<FONT SIZE=20><strong>IMPORTANTE: EL DÍA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR SU NÚMERO DE FOLIO (IMPRESO O EN IMAGEN) ASÍ COMO IDENTIFICACIÓN OFICIAL (FÍSICA) PARA VALIDAR SU REGISTRO Y RECIBIR SU KIT DE BIENVENIDA</strong></font><br>"
+        cuerpo = cuerpo + "<FONT SIZE=15><strong>El número de participación es único e intransferible. Favor de tomar en cuenta estos requisitos para agilizar el proceso. Cualquier duda comunicarse al 2381505344 o bien escribir al correo: chicoharley.teh@hotmail.com</strong></font><br>"
         Dim correo As New MailMessage()
         'correo.From = New MailAddress("contactohosting1@gmail.com")
-        correo.From = New MailAddress("chicoharley.teh2023@gmail.com")
+        correo.From = New MailAddress("chico.harley2024@gmail.com")
         'Destinatario
         correo.[To].Add(boRegistro.Email.Trim)
         'correo.Bcc.Add("marceloleon@outlook.com")
@@ -184,7 +197,8 @@ Partial Class formularioContacto
         servicio.UseDefaultCredentials = False
         'servicio.Credentials = New NetworkCredential("contactohosting1@gmail.com", "M@r1@n1t@")
         'servicio.Credentials = New NetworkCredential("chicoharley.teh@gmail.com", "chicoh@rley2020")
-        servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        'servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        servicio.Credentials = New NetworkCredential("chico.harley2024@gmail.com", "rfdssdjgtyhevvbc")
 
         Dim respuesta As Boolean = False
         Dim html As AlternateView = AlternateView.CreateAlternateViewFromString("<img src=" + "3.21.129.7/imageMail/header.png" + " alt=""Logo"" /><br />Usted ha quedado registrado para el evento de Chico Harley con los siguientes datos: <br><br>" + cuerpo, System.Text.Encoding.UTF8, "text/html")
@@ -213,6 +227,8 @@ Partial Class formularioContacto
           CorreoRegex.Match(LCase(Correo))
         Return CorreoMatch.Success
     End Function
+
+
 #End Region
 
 #Region "Sección: Métodos"
@@ -247,18 +263,18 @@ Partial Class formularioContacto
 
 
         boItems.Add(New BOItem("SELECCIONE...", "Z"))
-        'If s < MaxTallas.Small Then
-        '    boItems.Add(New BOItem("Small", "S"))
-        'End If
-        'If m < MaxTallas.Medium Then
-        '    boItems.Add(New BOItem("Medium", "M"))
-        'End If
-        'If l < MaxTallas.Great Then
-        '    boItems.Add(New BOItem("Large", "L"))
-        'End If
-        'If xl < MaxTallas.Xgreat Then
-        '    boItems.Add(New BOItem("XLarge", "XL"))
-        'End If
+        If s < MaxTallas.Small Then
+            boItems.Add(New BOItem("Small", "S"))
+        End If
+        If m < MaxTallas.Medium Then
+            boItems.Add(New BOItem("Medium", "M"))
+        End If
+        If l < MaxTallas.Great Then
+            boItems.Add(New BOItem("Large", "L"))
+        End If
+        If xl < MaxTallas.Xgreat Then
+            boItems.Add(New BOItem("XLarge", "XL"))
+        End If
         If p < MaxTallas.Patch Then
             boItems.Add(New BOItem("Patch", "P"))
             'RadioButtonList1.Items(1).Enabled = True
@@ -304,9 +320,15 @@ Partial Class formularioContacto
 #Region "Sección: Funciones"
 
     Private Function ExisteDatoPreviamente(s As String, valor As ValoresUnicos) As Boolean
-        Dim rpt = New DalRegistro().ValorRegistradoPreviamente(s, valor)
-        Return rpt
+        If valor = ValoresUnicos.Email AndAlso s.ToLower().Trim() = "chicoharley.teh@hotmail.com" Then
+            ' Si el correo es el permitido, no realizamos la validación y retornamos False
+            Return False
+        Else
+            ' Si el correo no es el permitido, realizamos la validación normal
+            Return New DalRegistro().ValorRegistradoPreviamente(s, valor)
+        End If
     End Function
+
 
     Private Function ValidarInformacion() As Boolean
         If (ValidarCampos() = False) Then

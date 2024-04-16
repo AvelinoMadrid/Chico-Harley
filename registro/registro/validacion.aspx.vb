@@ -39,13 +39,15 @@ Partial Class validacion
         Dim boRegistro As BORegistro = New DalRegistro().ObtenerPorIdRegistro(id)
         Dim cuerpo As String = String.Empty
         cuerpo = cuerpo + "<strong>Folio: </strong><FONT SIZE=5>" + boRegistro.Folio + "</font><br>"
-        cuerpo = cuerpo + "<strong>IMPORTANTE: EL DIA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR UNA COPIA DE TU CREDENCIAL </strong><br>" +
-            "<strong>DE ELECTOR JUNTO CON ESTE EMAIL, DE LO CONTRARIO NO RECIBIRA PAQUETE DE BIENVENIDA</strong><br>" +
-            "<strong>La clave única de registro así como el número de participación, son únicos e intransferibles,</strong><br>" +
-            "<strong>favor de tomar muy en cuenta estos requisitos. Cualquier duda favor de comunicarse al 2381505344 </strong><br>" +
-            "<strong>o bien escribir al correo electrónico: chicoharley.teh@hotmail.com</strong><br>"
+        'cuerpo = cuerpo + "<strong>IMPORTANTE: EL DIA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR UNA COPIA DE TU CREDENCIAL </strong><br>" +
+        '    "<strong>DE ELECTOR JUNTO CON ESTE EMAIL, DE LO CONTRARIO NO RECIBIRA PAQUETE DE BIENVENIDA</strong><br>" +
+        '    "<strong>La clave única de registro así como el número de participación, son únicos e intransferibles,</strong><br>" +
+        '    "<strong>favor de tomar muy en cuenta estos requisitos. Cualquier duda favor de comunicarse al 2381505344 </strong><br>" +
+        '    "<strong>o bien escribir al correo electrónico: chicoharley.teh@hotmail.com</strong><br>"
+        cuerpo = cuerpo + "<FONT SIZE=20><strong>IMPORTANTE: EL DÍA DEL REGISTRO EN EL EVENTO ES OBLIGATORIO PRESENTAR SU NÚMERO DE FOLIO (IMPRESO O EN IMAGEN) ASÍ COMO IDENTIFICACIÓN OFICIAL (FÍSICA) PARA VALIDAR SU REGISTRO Y RECIBIR SU KIT DE BIENVENIDA</strong></font><br>"
+        cuerpo = cuerpo + "<FONT SIZE=15><strong>El número de participación es único e intransferible. Favor de tomar en cuenta estos requisitos para agilizar el proceso. Cualquier duda comunicarse al 2381505344 o bien escribir al correo: chicoharley.teh@hotmail.com</strong></font><br>"
         Dim correo As New MailMessage()
-        correo.From = New MailAddress("chicoharley.teh2023@gmail.com")
+        correo.From = New MailAddress("chico.harley2024@gmail.com")
         'Destinatario
         correo.[To].Add(boRegistro.Email.Trim)
         'correo.Bcc.Add("marceloleon@outlook.com")
@@ -60,7 +62,8 @@ Partial Class validacion
         servicio.EnableSsl = True
         servicio.UseDefaultCredentials = False
         'servicio.Credentials = New NetworkCredential("chicoharley.teh@gmail.com", "chicoh@rley2020")
-        servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        'servicio.Credentials = New NetworkCredential("chicoharley.teh2023@gmail.com", "dkflhqofvxxhviro")
+        servicio.Credentials = New NetworkCredential("chico.harley2024@gmail.com", "rfdssdjgtyhevvbc")
 
         Dim respuesta As Boolean = False
         Dim html As AlternateView = AlternateView.CreateAlternateViewFromString("<img src=" + "3.21.129.7/imageMail/header.png" + " alt=""Logo"" /><br />Usted ha quedado registrado para el evento de Chico Harley con los siguientes datos: <br><br>" + cuerpo, System.Text.Encoding.UTF8, "text/html")
