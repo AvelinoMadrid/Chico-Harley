@@ -70,14 +70,14 @@ Partial Class formularioContacto
 
 
                         Select Case ddlTalla.SelectedValue
-                            Case "S" : Dim s As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("S")
-                                Dim ae As Integer = New DalRegistro().ObtenerTallaPY("S")
-                                If s >= ae Then
-                                    If ae = 0 Then
-                                        Response.Write("<script>alert('Lo sentimos pero la talla S de esta playera se ha terminado');</script>")
-                                        Exit Sub
-                                    End If
-                                End If
+                            'Case "S" : Dim s As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("S")
+                            '    Dim ae As Integer = New DalRegistro().ObtenerTallaPY("S")
+                            '    If s >= ae Then
+                            '        If ae = 0 Then
+                            '            Response.Write("<script>alert('Lo sentimos pero la talla S de esta playera se ha terminado');</script>")
+                            '            Exit Sub
+                            '        End If
+                            '    End If
                             Case "M" : Dim m As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("M")
                                 Dim als As Integer = New DalRegistro().ObtenerTallaPY("M")
                                 If m >= als Then
@@ -263,9 +263,9 @@ Partial Class formularioContacto
 
 
         boItems.Add(New BOItem("SELECCIONE...", "Z"))
-        If s < MaxTallas.Small Then
-            boItems.Add(New BOItem("Small", "S"))
-        End If
+        'If s < MaxTallas.Small Then
+        '    boItems.Add(New BOItem("Small", "S"))
+        'End If
         If m < MaxTallas.Medium Then
             boItems.Add(New BOItem("Medium", "M"))
         End If
@@ -285,7 +285,7 @@ Partial Class formularioContacto
             boItems.Add(New BOItem("Comida", "Comida"))
         End If
         If nda < MaxTallas.Nada Then
-            boItems.Add(New BOItem("Sin nada", "Nada"))
+            boItems.Add(New BOItem("Acceso al evento", "Nada"))
         End If
 
         ddlTalla.DataSource = boItems
