@@ -35,25 +35,25 @@ Partial Class formularioContacto
         End If
 
         If txtLugar.Text.Trim.ToLower = "ajalpan" Or txtEstado.Text.Trim.ToLower = "ajalpan" Then
-            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2382505344 con Blanca González Solis');</script>")
+            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2381505344 con Blanca González Solis');</script>")
             Exit Sub
         End If
         If txtLugar.Text.Trim.ToLower = "tehuacán" Or txtEstado.Text.Trim.ToLower = "tehuacán" Or txtLugar.Text.Trim.ToLower = "tehuacan" Or txtEstado.Text.Trim.ToLower = "tehuacan" Then
-            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2382505344 con Blanca González Solis');</script>")
+            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2381505344 con Blanca González Solis');</script>")
             Exit Sub
         End If
         If txtLugar.Text.Trim.ToLower = "coapan" Or txtEstado.Text.Trim.ToLower = "coapan" Or txtLugar.Text.Trim.ToLower = "santa maria coapan" Or txtEstado.Text.Trim.ToLower = "santa maria coapan" Then
-            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2382505344 con Blanca González Solis');</script>")
+            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2381505344 con Blanca González Solis');</script>")
             Exit Sub
         End If
         If txtLugar.Text.Trim.ToLower = "miahuatlan " Or txtEstado.Text.Trim.ToLower = "miahuatlan" Or txtLugar.Text.Trim.ToLower = "santiago miahuatlan" Or txtEstado.Text.Trim.ToLower = "santiago miahuatlan" Then
-            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2382505344 con Blanca González Solis');</script>")
+            Response.Write("<script>alert('Para la inscripción debe ponerse en contacto al número 2381505344 con Blanca González Solis');</script>")
             Exit Sub
         End If
 
         ' Verificar si el teléfono tiene la lada "238"
         If txtCelular1.Text.Trim().StartsWith("238") Then
-            Response.Write("<script>alert('Para la inscripción con ese teléfono debe ponerse en contacto al número 2382505344 con Blanca González Solis');</script>")
+            Response.Write("<script>alert('Para la inscripción con ese teléfono debe ponerse en contacto al número 2381505344 con Blanca González Solis');</script>")
             Exit Sub
         End If
 
