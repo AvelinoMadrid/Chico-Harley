@@ -3,6 +3,7 @@ Imports System.Net
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
+Imports System.Diagnostics
 
 
 Partial Class formularioContacto
@@ -267,33 +268,29 @@ Partial Class formularioContacto
         Dim comd As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("Comida")
         Dim nda As Integer = New DalRegistro().ObtenerTotalPlayerasPorTalla("Nada")
 
+        ' Mensajes de depuración para verificar los valores
+        Debug.WriteLine("s: " & s)
+        Debug.WriteLine("m: " & m)
+        Debug.WriteLine("l: " & l)
+        Debug.WriteLine("xl: " & xl)
+        Debug.WriteLine("p: " & p)
+        Debug.WriteLine("comd: " & comd)
+        Debug.WriteLine("nda: " & nda)
 
         boItems.Add(New BOItem("SELECCIONE...", "Z"))
-        'If s < MaxTallas.Small Then
-        '    boItems.Add(New BOItem("Small", "S"))
-        'End If
-        If m < MaxTallas.Medium Then
-            boItems.Add(New BOItem("Medium", "M"))
-        End If
-        If l < MaxTallas.Great Then
-            boItems.Add(New BOItem("Large", "L"))
-        End If
-        If xl < MaxTallas.Xgreat Then
-            boItems.Add(New BOItem("XLarge", "XL"))
-        End If
-        If p < MaxTallas.Patch Then
-            boItems.Add(New BOItem("Patch", "P"))
-            'RadioButtonList1.Items(1).Enabled = True
-        Else
-            RadioButtonList1.Items(1).Enabled = False
-        End If
-        If comd < MaxTallas.Comida Then
-            boItems.Add(New BOItem("Comida", "Comida"))
-        End If
-        If nda < MaxTallas.Nada Then
-            boItems.Add(New BOItem("Acceso al evento", "Nada"))
-        End If
+        boItems.Add(New BOItem("Medium", "M"))
+        boItems.Add(New BOItem("Large", "L"))
+        boItems.Add(New BOItem("XLarge", "XL"))
+        boItems.Add(New BOItem("Patch", "P"))
+        boItems.Add(New BOItem("Comida", "Comida"))
+        boItems.Add(New BOItem("Acceso al evento", "Nada"))
 
+        ' Mensaje de depuración para verificar las opciones agregadas
+        For Each item As BOItem In boItems
+            Debug.WriteLine("Talla: " & item.Talla)
+        Next
+
+        ' Enlazar los datos al RadioButtonList
         ddlTalla.DataSource = boItems
         ddlTalla.DataValueField = "Valor"
         ddlTalla.DataTextField = "Talla"
